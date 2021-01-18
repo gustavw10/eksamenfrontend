@@ -11,7 +11,11 @@ import {
   useParams,
   useRouteMatch
 } from "react-router-dom";
+
+
+const url = "http://localhost:8080/eksamen/api/"
  
+
 function LogIn({ login }) {
   const init = { username: "", password: "" };
   const [loginCredentials, setLoginCredentials] = useState(init);
@@ -75,9 +79,7 @@ function LoggedIn(props) {
       </Switch>
     </div>
     );
- 
 }
-
 
 const Header = (props) => {
   return (
@@ -93,10 +95,9 @@ const Header = (props) => {
   );
 }
 
-const url = "http://localhost:8080/eksamen/api/"
 
 const Action = (props) => {
-  // let url = "http://localhost:8080/eksamen/api/";
+  
   let dat;
   localStorage.setItem('type', "GET")
    facade.fetchFromServer(url + props.middleId + props.id).then(data=>{
@@ -117,14 +118,7 @@ function Home(props) {
 
 function Admin(props) {
   const [searches, setSearches] = useState("")
-  // const Action = (props) => {
-  //   let dat;
-  //   localStorage.setItem('type', "GET")
-  //    facade.fetchFromServer(url + props.middleId + props.id).then(data=>{
-  //     dat = data;
-  //   })
-  //   return (<button class="btn btn-outline-info" onClick= {() => props.setItem(dat)}>{props.buttonText}</button>)
-  // }
+
   if(searches.searches){
   return (<div>
   <Action id={"searches"} middleId="info/" methodType="GET" buttonText ="Get searches" setItem={(item) => setSearches(item)} />
@@ -132,51 +126,29 @@ function Admin(props) {
   return (<div><Action id={"searches"} middleId="info/" methodType="GET" buttonText ="Get searches" setItem={(item) => setSearches(item)} /></div>)
   }
  
-  
-
 
 function Breeds() {
   const [breeds, setBreeds] = useState(0)
   const [specificBreed, setSpecificBreed] = useState({breed: ""})
   const [breedToSearch, setBreedToSearch] = useState("boxer")
-  // const url = "http://localhost:8080/eksamen/api/"
 
   useEffect(() => {
-   
   }, []);
 
-  
-  // const Action = (props) => {
-  //   let dat;
-  //   localStorage.setItem('type', "GET")
-  //    facade.fetchFromServer(url + props.middleId + props.id).then(data=>{
-  //     dat = data;
-  //   })
-  //   return (<button class="btn btn-outline-info" onClick= {() => props.setItem(dat)}>{props.buttonText}</button>)
-  // }
+  return(<div>
+    
+    <input type="text" id="myInput" placeholder="Insert ID" value={breedToSearch} onChange={(event) => setBreedToSearch(event.target.value)} /><br/>
+    <Action id={breedToSearch} middleId="info/breedInfo/" buttonText ="Find breed" setItem={(item) => setSpecificBreed(item)} /><br/>
 
-  if(specificBreed.breed != ""){
-  return (<div>
-  <br/>
-  <input type="text" id="myInput" placeholder="Insert ID" value={breedToSearch} onChange={(event) => setBreedToSearch(event.target.value)} />
-  <Action id={breedToSearch} middleId="info/breedInfo/" buttonText ="Find breed" setItem={(item) => setSpecificBreed(item)} />
-  
-  <br/>
-   {specificBreed.breed != "" && <div class="wrapper fadeIn">
+    {specificBreed.breed != "" ? <div>
+      
+      {specificBreed.breed != "" && <div class="wrapper fadeIn">
       Breed: {specificBreed.breed && specificBreed.breed}<br />
       Wikipedia: {specificBreed.wikipedia && specificBreed.wikipedia}<br/><br/>
-      <img src={specificBreed.image}></img></div>} 
-
-    <Action id={"breeds"} middleId="info/" methodType="GET" buttonText ="Show all breeds" setItem={(item) => setBreeds(item)} />
-    {breeds.dogs && <div class="wrapper fadeIn">{breeds.dogs.map((data ) => (<div>{data.breed}<br/><br/></div>))}</div>} 
-
-  </div>)}
-
-  return (<div>
-    <br/>
-    <input type="text" id="myInput" placeholder="Insert ID" value={breedToSearch} onChange={(event) => setBreedToSearch(event.target.value)} />
-    {/* <input type="text" id="myInput" placeholder="Insert ID" value={breedToSearch} onChange={(event) => setBreedToSearch(event.target.value)} /> */}
-    <Action id={breedToSearch} middleId="info/breedInfo/" buttonText ="Find breed" setItem={(item) => setSpecificBreed(item)} />
+      <img src={specificBreed.image}></img><br/>
+      {specificBreed.facts && specificBreed.facts}<br/></div>} </div> 
+    
+    : <div></div>}
 
     <Action id={"breeds"} middleId="info/" methodType="GET" buttonText ="Show all breeds" setItem={(item) => setBreeds(item)} />
     {breeds.dogs && <div class="wrapper fadeIn">{breeds.dogs.map((data ) => (<div>{data.breed}<br/><br/></div>))}</div>} 
@@ -208,7 +180,6 @@ class AddDog extends React.Component {
   
     handleSubmit(event) {
     event.preventDefault()
-    // let url = "http://localhost:8080/eksamen/api/info/addDog/2"
    
     let dog = {
      name: this.state.name,
@@ -319,77 +290,39 @@ class AddDog extends React.Component {
 
 
 function YourDogs(){
+  
   const [yourDogs, setYourDogs] = useState(0)
-  // const url = "http://localhost:8080/eksamen/api/"
-
-  // const Action = (props) => {
-  //   let dat;
-  //   localStorage.setItem('type', props.methodType)
-  //   localStorage.setItem('body', undefined)
-  //    facade.fetchFromServer(url + props.middleId + props.id).then(data=>{
-  //     dat = data;
-  //   })
-  //   return (<button class="btn btn-outline-info" onClick= {() => props.setItem(dat)}>{props.buttonText}</button>)
-  // }
-
   return (<div>
     
     <AddDog />
     <br/>
     <EditDog />
     <Action id={"dogs"} middleId="info/" methodType="GET" buttonText ="Show your dogs" setItem={(item) => setYourDogs(item)} />
-    {yourDogs.dogsDTO && <div class="wrapper fadeIn">{yourDogs.dogsDTO.map((data ) => (<div><b>{data.name}</b><br/> Id: {data.id} <br/>Born {data.dateOfBirth} <br/>{data.info}<br/><br/></div>))}</div>}
+    
+    {yourDogs.dogsDTO ? <div class="wrapper fadeIn">{yourDogs.dogsDTO.map((data ) => (<div><b>{data.name}</b><br/> Id: {data.id} <br/>Born {data.dateOfBirth} <br/>{data.info}<br/><br/></div>))}</div>
+    : <div></div>}
 
   </div>);
 }
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
 
-// function Database(){
-//   const [count, setCount] = useState(0)
-//   const [authoredBook, setAuthoredBook] = useState({})
-//   const [bookToFind, setBookToFind] = useState(102)
-//   const [author, setAuthor] = useState({})
-//   const [authorToFind, setAuthorToFind] = useState(101)
-//   const [display, setDisplay] = useState("")
-//   const url = "http://localhost:8080/startcode/api/info/"
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
 
-//   useEffect(() => {
-   
-//   }, []);
-
-//   const ActionButton = (props) => {
-//     let dat;
-//      fetch(url + props.middleId + props.id).then(res=>res.json()).then(data=>{
-//        dat = data;
-//      })
-//     return (<button class="btn btn-outline-info" onClick= {() => props.setItem(dat)}>{props.buttonText}</button>)
-//   }
-  
-//   return (<div class="wrapper fadeIn">
-  
-//   <input type="text" id="myInput" placeholder="Insert ID" value={bookToFind} onChange={(event) => setBookToFind(parseInt(event.target.value))} />
-//   <ActionButton id={bookToFind} middleId="authoredbook/" buttonText ="Find book by ID" setItem={(item) => setAuthoredBook(item)} />
-//   {authoredBook.title && <div class="wrapper fadeIn">
-//   Title: {authoredBook.title && authoredBook.title}<br />
-//   Release date: {authoredBook.releaseDate && authoredBook.releaseDate}<br />
-//   Author: {authoredBook.author && authoredBook.author}</div>}
-
-
-//   <input type="text" id="myInput" placeholder="Insert ID" value={authorToFind} onChange={(event) => setAuthorToFind(parseInt(event.target.value))} />
-//   <ActionButton id={authorToFind} middleId="authorDTO/" buttonText ="Find author by ID" setItem={(item) => setAuthor(item)} />
-//   {author.firstName && <div class="wrapper fadeIn">
-//   First name: {author.firstName && author.firstName}<br />
-//   Last name: {author.lastName && author.lastName}<br />
-//   Book titles: {author.booksSimple && author.booksSimple}</div>}<br/>
-
-//   <ActionButton id={"all"} middleId="authoredbook/" buttonText ="Get all books" setItem={(item) => setDisplay(item)} />
-//   <ActionButton id={"all"} middleId="authorDTO/" buttonText ="Get all authors" setItem={(item) => setDisplay(item)} />
-  
-//   {display.booksDTO && <div class="wrapper fadeIn">{display.booksDTO.map((data ) => (<div>{data.id}: {data.title} by {data.author}<br/></div>))}</div>}
-//   {display.authorsDTO && <div class="wrapper fadeIn">{display.authorsDTO.map((data ) => (<div>{data.id}: {data.firstName} {data.lastName}<br/></div>))}</div>}
-//   </div>)
-// }
+    return this.props.children; 
+  }
+}
 
  
 function App() {
@@ -411,9 +344,17 @@ function App() {
       })
     })
     ;} 
- 
-  return (
-    <div style={{ textAlign: "center"}} class="wrapper fadeInDown">      
+
+    return (
+      <ErrorBoundary
+        fallbackRender =  {({error, resetErrorBoundary, componentStack}) => (
+            <div>
+            <h1>An error occurred: {error.message}</h1>
+            <button onClick={resetErrorBoundary}>Try again</button>
+          </div>
+        )}
+      >
+        <div style={{ textAlign: "center"}} class="wrapper fadeInDown">      
         <br>
         </br>
         <br></br>
@@ -421,6 +362,8 @@ function App() {
           <LoggedIn logout={logout} login={login} loggedIn = {loggedIn} errorMessage = {errorMessage}/>
           </Router><br></br>
         </div>
-  )
+      </ErrorBoundary>
+    );
+ 
 }
 export default App;

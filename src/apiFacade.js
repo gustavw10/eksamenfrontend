@@ -56,23 +56,11 @@ const sendToServer = (props) => {
   return fetch(props, options).then(handleHttpErrors);
 }
 
-// const sendWrap = ({dog, url}) => {
-//   let e = url;
-//   let body = dog;
-
-//   console.log(url)
-  
-//   // sendToServer = (props) => {
-//   // let type = localStorage.getItem('type')
-//   // // let body = localStorage.getItem('body')
-
-//   console.log("--")
-//   console.log(JSON.stringify(body))
-
-//   const options = makeOptions("POST", true, body);
-//   return fetch(url, options).then(handleHttpErrors);
-
-// }
+const pingAdmin = (props) => {
+  const options = makeOptions("GET", true);
+  let str = fetch(props, options).then(handleHttpErrors);
+  return str;
+}
 
 const makeOptions= (method,addToken,body) =>{
   
@@ -101,7 +89,8 @@ const makeOptions= (method,addToken,body) =>{
      logout,
      fetchData,
      sendToServer,
-     fetchFromServer
+     fetchFromServer,
+     pingAdmin
  }
 }
 
